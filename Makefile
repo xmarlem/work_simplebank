@@ -39,3 +39,6 @@ migrate.up:
 	migrate -database=$(POSTGRESQL_URL) -path=db/migration -verbose up
 migrate.down:
 	migrate -database=$(POSTGRESQL_URL) -path=db/migration -verbose down
+
+sqlc:
+	sqlc generate

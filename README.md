@@ -41,3 +41,29 @@ L'idea e':
 
 18.12.2023: Lezione 4 - CRUD operations sul db
 https://www.youtube.com/watch?v=prh0hTyI1sU&list=PLy_6D98if3ULEtXtNSY_2qN21VCKgoQAE&index=5
+
+In pratica ho installato sqlc... 
+
+Con `sqlc init` mi crea un file sqlc.yaml in root.
+
+A questo punto sono andato sul sito di sqlc ed ho copiato un config di esempio... a cui ho sostituito i valori come nel tutorial.
+Attenzione, io sto usando la versione 2, nel tutorial usa la versione 1. Bisogna adattarla campo per campo. 
+Nel mio caso ho levao il field cloud e il riferimento a managed db.
+
+Ricapitolando:
+- in `db` folder abbiamo:
+    - migration: contiene tutte le migrazioni. Vi punto anche dal sqlc.yaml
+    - query: e' la folder dove inserisco tutte le query che do in input a sqlc... contenenti le varie annotazioni di sqlc
+    - sqlc: e' la mia folder ti output contenenti tutto il codice generato
+
+In pratica ho scritto tutte le query per crud in account.sql e generato il codice corrispondente. 
+
+19.12.2023: Lezione 5: write unit test for database CRUD
+https://www.youtube.com/watch?v=phHDfOHB2PU&list=PLy_6D98if3ULEtXtNSY_2qN21VCKgoQAE&index=6
+
+Installato il driver pg: `go get github.com/lib/pq`
+
+Poi abbiamo creato i test... main_test.go e account_test.go
+
+
+NB. ho dovuto commentare la riga `sql_package: "pgx/v5"` in sqlc.yaml altrimenti la conn non funzionava... non veniva presa salla New()
