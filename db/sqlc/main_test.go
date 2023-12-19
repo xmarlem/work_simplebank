@@ -9,7 +9,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var testQueries *Queries
+var (
+	testQueries *Queries
+	testDB      *sql.DB
+)
 
 const (
 	dbDriver = "postgres"
@@ -17,12 +20,13 @@ const (
 )
 
 func TestMain(m *testing.M) {
-	conn, err := sql.Open(dbDriver, dbSource)
+	var err error
+	testDB, err = sql.Open(dbDriver, dbSource)
 	if err != nil {
 		log.Fatal("cannot connect to database:", err)
 	}
 
-	testQueries = New(conn)
+	testQueries = New(testDB)
 
 	os.Exit(m.Run())
 }

@@ -1,19 +1,19 @@
 # Log
 
 
-15.12.2023: Lezione 0
+## 15.12.2023: Lezione 0
 https://www.youtube.com/watch?v=TtCfDXfSw_0&list=PLy_6D98if3ULEtXtNSY_2qN21VCKgoQAE&ab_channel=TECHSCHOOL
 
 Ho installato sqlc con `go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`
 
-15.12.2023: Lezione 1
+## 15.12.2023: Lezione 1
 https://www.youtube.com/watch?v=Q9ipbLeqmQo&list=PLy_6D98if3ULEtXtNSY_2qN21VCKgoQAE&index=3&ab_channel=TECHSCHOOL
 
 
-15.12.2023: Lezione 2
+## 15.12.2023: Lezione 2
 
 
-17.12.2023: Lezione 3
+## 17.12.2023: Lezione 3
 https://www.youtube.com/watch?v=0CYkrGIJkpw&list=PLy_6D98if3ULEtXtNSY_2qN21VCKgoQAE&index=4
 
 Schema migration 
@@ -39,7 +39,7 @@ L'idea e':
 - creo una migrazione 
 - copio tutto questo codice generato direttamente nei migration files
 
-18.12.2023: Lezione 4 - CRUD operations sul db
+## 18.12.2023: Lezione 4 - CRUD operations sul db
 https://www.youtube.com/watch?v=prh0hTyI1sU&list=PLy_6D98if3ULEtXtNSY_2qN21VCKgoQAE&index=5
 
 In pratica ho installato sqlc... 
@@ -67,3 +67,67 @@ Poi abbiamo creato i test... main_test.go e account_test.go
 
 
 NB. ho dovuto commentare la riga `sql_package: "pgx/v5"` in sqlc.yaml altrimenti la conn non funzionava... non veniva presa salla New()
+
+Ho anche creato il random generator e un nuovo target per test nel Makefile. 
+
+## 19.12.2023: Lezione 6 - A clean way to implement database transaction in Golang
+https://www.youtube.com/watch?v=gBh__1eFwVI 
+
+Qui si introducono le transactions.
+
+Come prima cosa creo un nuovo file store.go in cui definisco una struct in cui definire il supporto per le transazioni. 
+
+Questa struct fornisce tutte le funzioni per eseguire le query individualmente cosi come la loro combinazione con le transazioni.
+
+Per le query individuali abbiamo gia la struct Queries generata da sqlc. 
+
+Each query only does one query on a specific table. Queries struct does not support transactions. 
+This is why we have to extend its functionality by embedding inside the struct by composition.
+
+We need to embed also the db object in order to support for transactions 
+
+
+`execTx` e' una funzione che serve per eseguire una transazione generica. L'idea e' semplice. Il concetto e' prendere un context e una callback function come input ... una sorta di wrapper. 
+
+BeginTx e' l'inizio della transazione... 
+
+Allochiamo un oggetto di tipo `Queries` che mi viene restituito dalla New generata dal `sqlc`.
+
+NB. il parametro options passato a BeginTx serve per settare l'isolation method.
+
+La struttura e' una sorta di wrapper con:
+- begin
+- rollback in caso di errore
+- commit in caso di successo
+
+# Appendix
+
+## DBTX interface
+
+Viene generata da SQLC.
+
+```go
+type DBTX interface {
+	ExecContext(context.Context, string, ...interface{}) (sql.Result, error)
+	PrepareContext(context.Context, string) (*sql.Stmt, error)
+	QueryContext(context.Context, string, ...interface{}) (*sql.Rows, error)
+	QueryRowContext(context.Context, string, ...interface{}) *sql.Row
+}
+```
+
+Un oggetto "db" che implementa questa inferface puo' essere passato alla factory `New`
+
+NB. La struct `database/sql` DB implementa l'interfaccia `DBTX` 
+
+motivo per cui possiamo passarlo alla factory `New` senza problemi.
+
+
+
+
+
+## PGX: 
+
+**pgx** is a pure Go driver and toolkit for PostgreSQL. It’s become the default PostgreSQL package for many Gophers since lib/pq was put into maintenance mode.
+
+To start generating code that uses pgx, set the sql_package field in your sqlc.yaml configuration file. Valid options are pgx/v4 or pgx/v5
+
