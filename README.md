@@ -100,6 +100,34 @@ La struttura e' una sorta di wrapper con:
 - rollback in caso di errore
 - commit in caso di successo
 
+
+## 19.12.2023: Lezione 7 - DB transaction lock & How to handle deadlock in Golang
+https://www.youtube.com/watch?v=G2aggv_3Bbg
+
+Qui vediamo i transaction locks.
+
+Usa TDD per questo video.
+
+In soldoni, fa notare come transfer tx contiene un deadlock... 
+e questo deadlock e' dovuto al fatto che viene richiesto un lock su una select dovuta alle foreign keys.
+C'é una dipendenza tra account e transfer table via foreign key... 
+Se la si disabilita ... si risolve il deadlock... 
+ma non e'la soluzione ideale... vogliamo mantenere la foreign key contraint...
+quindi lo rimette ... e prova a risolvere in un altro modo.
+
+.... 
+
+Come risolve? Aggiungendo "FOR NO KEY UPDATE"in GetAccountForUpdate. In tal modo diciamo a postgres di non fare lock per quella select in quanto non andremo a toccare quella chiave... 
+
+Alla fine fa vedere come migliorare il codice della transferTx... aggiungendo AddAccountBalance.
+
+NB. per modificare e rinominare un argument in sqlc... 
+invece di $2, usa sqlc.arg(NEWNAME)
+
+NEWNAME e' il nome del nuovo parametro generato nella corrispondente request struct. 
+
+
+
 # Appendix
 
 ## DBTX interface
