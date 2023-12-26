@@ -127,6 +127,60 @@ invece di $2, usa sqlc.arg(NEWNAME)
 NEWNAME e' il nome del nuovo parametro generato nella corrispondente request struct. 
 
 
+## 22.12.2023 - Lezione 8 - how to avoid db deadlock
+
+Uso questa query per controllare i lock:
+```sql
+SELECT a.application_name,
+         l.relation::regclass,
+         l.transactionid,
+         l.mode,
+		 l.locktype,
+         l.GRANTED,
+		 a.pid,
+         a.usename,
+         a.query,
+         a.query_start,
+         age(now(), a.query_start) AS "age",
+         a.pid
+FROM pg_stat_activity a
+JOIN pg_locks l ON l.pid = a.pid
+WHERE a.application_name = 'psql'
+ORDER BY a.query_start;
+```
+
+Da questa query vedo quali query hanno un lock, lo stato del lock (granted, cioe' se e' stato concesso o no) e tante altre info.
+
+Per esempio, la transaction id, il tipo di lock, se shared o exclusive. 
+
+Piu' dettagli qui... nb. transaction id mi dice l'id della transazione che sta aspettando la transazione corrente.
+
+(ID of the transaction targeted by the lock, or null if the target is not a transaction ID)
+
+https://www.postgresql.org/docs/current/monitoring-stats.html
+
+How to prevent deadlocks? 
+To make sure all applications always aquire locks in a consistent order. 
+
+Che significa? 
+Se una transazione deve fare l'update di due account, account1 e account2.
+Possiamo definire una regola secondo la quale facciamo l'update a partire dall'account id piu' piccolo. 
+
+In questa lezione abbiamo anche creato un metodo helper AddMoney per refactoring.
+
+
+
+## 26.12.2023 - Lezione 9 - Transaction isolation level
+https://www.youtube.com/watch?v=4EajrPgJAk0
+
+Spiega prima la teoria poi fa qualche esempio con pqsl per dimostrare i vari tipi di isolation.
+
+
+## 26.12.2023 - Lezione 10 - Setup Github Actions for Golang + Postgres to run automated tests
+https://www.youtube.com/watch?v=3mzQRJY1GVE
+
+
+
 
 # Appendix
 
