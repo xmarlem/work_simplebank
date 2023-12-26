@@ -179,6 +179,9 @@ Spiega prima la teoria poi fa qualche esempio con pqsl per dimostrare i vari tip
 ## 26.12.2023 - Lezione 10 - Setup Github Actions for Golang + Postgres to run automated tests
 https://www.youtube.com/watch?v=3mzQRJY1GVE
 
+Ho creato un nuovo repository in github e pushato il codice. 
+L'ho chiamato work_simplebank (a differenza di quello esistente work-simplebank).
+
 
 
 
