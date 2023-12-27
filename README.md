@@ -182,6 +182,10 @@ https://www.youtube.com/watch?v=3mzQRJY1GVE
 Ho creato un nuovo repository in github e pushato il codice. 
 L'ho chiamato work_simplebank (a differenza di quello esistente work-simplebank).
 
+We created just a test job which triggers `make test`. At the first execution we expect the job to fail as we dont have a database to which we can connect from the pipeline. 
+
+We search then for a `gitlab action` to setup the postgres db. 
+We connect to [postgres action](https://docs.github.com/en/actions/using-containerized-services/creating-postgresql-service-containers)
 
 
 
