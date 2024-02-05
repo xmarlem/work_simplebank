@@ -187,6 +187,87 @@ We created just a test job which triggers `make test`. At the first execution we
 We search then for a `gitlab action` to setup the postgres db. 
 We connect to [postgres action](https://docs.github.com/en/actions/using-containerized-services/creating-postgresql-service-containers)
 
+In order to make it working we had to add a small piece to the pipeline regarding the port exposing. 
+
+```git
+ports:
+    # Maps tcp port 5432 on service container to the host
+    - 5433:5432
+```
+
+in our case....
+
+
+## 27.12.2023 - Lezione 11 - Implement RESTful HTTP API in Go using Gin
+https://www.youtube.com/watch?v=n_Y_YisgqTw
+
+Here we write the api with GIN.
+
+
+We also start with the validator framework in GIN. 
+
+
+We wrote an `errorResponse` function to support and make gin able to convert an error to a key-value object. 
+
+
+ctx.JSON() is a function which serializes the given struct as JSON into the response body.
+It also sets the Content-Type as "application/json".
+
+NB. we have a `gin.H` shortcut to `map[string]any` we can use to implement the errorResponse function. 
+This will be the object to return.
+
+Created the Start method to start the server.
+
+We created the main.go and instantiated the server, with the db etc... 
+
+Next we tried to run (added also a make server target in makefile) the server and try the createAccount REST call from Postman.
+Also tried the validation methods by checking e.g. empty fileds provided --> http error code and msg... 
+
+
+Here we implemented getAccount method, by getting an input parameter (id) from uri.
+Next he mentions to implement pagination on listAccounts... but instead of taking input parameters from request body or uri, we get it from query string... (e.g. ...accounts?page_id=0&page_size=5)
+
+Once implemented, we tested the same with postman. Also noticed that if providing a non existing page id, it returns "null".
+So, we modified sqlc conf file by adding `emit_empty_slices: true` so that we get `[]`.
+
+## 06.01.2024 - Lezione 12 - Load config from file & environment variables in Golang with Viper
+
+Atm we are encoding in constan variables several parameters like db related ones. 
+
+We install viper... and then add viper to load from config file to Config struct.
+
+
+## 05.02.2024 - Lezione 13 - Mock DB for testing HTTP API in go and achieve 100% coverage 
+
+Why use mock database? 
+
+- It helps to write independent tests easily ... it isolate tests data to avoid conflicts.
+- Faster tests: it recudes a lot of time talking to the database. 
+- 100% coverage: easily setup edge cases: unexpected errors
+
+
+Is it good enough to test our API with a mock DB? Yes!. Our real db store is already tested in previous lectures. 
+
+Mock db and real db should implement the same interface. 
+
+
+### How to mock db? 
+Two ways:
+- use fake db: in memory
+    implement a fake version of DB: store data in memory
+    CONS: it requires to write much more code... 
+- Use DB stubs: gomock
+  - generage and build stubs that returns hard-coded values
+
+
+![Alt text](./img/13_1.png)
+
+
+First we have to install for gomock.
+
+`go install github.com/golang/mock/mockgen@v1.6.0`
+
+
 
 
 # Appendix

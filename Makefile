@@ -1,4 +1,4 @@
-.PHONY: db migrate.up migrate.down
+.PHONY: db migrate.up migrate.down server
 
 DB_PASSWORD=test
 DB_HOST=localhost
@@ -45,3 +45,6 @@ sqlc:
 
 test:
 	go test -v -cover ./...
+
+server:
+	go run main.go
