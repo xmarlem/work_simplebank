@@ -1,4 +1,4 @@
-.PHONY: db migrate.up migrate.down server
+.PHONY: db migrate.up migrate.down migrate.down1 migrate.up1 server mock
 
 DB_PASSWORD=test
 DB_HOST=localhost
@@ -40,6 +40,12 @@ migrate.up:
 migrate.down:
 	migrate -database=$(POSTGRESQL_URL) -path=db/migration -verbose down
 
+migrate.up1:
+	migrate -database=$(POSTGRESQL_URL) -path=db/migration -verbose up 1
+
+migrate.down1:
+	migrate -database=$(POSTGRESQL_URL) -path=db/migration -verbose down 1 
+
 sqlc:
 	sqlc generate
 
@@ -48,3 +54,6 @@ test:
 
 server:
 	go run main.go
+
+mock:
+	mockgen -package mockdb -destination db/mock/store.go github.com/xmarlem/simplebank/db/sqlc Store 

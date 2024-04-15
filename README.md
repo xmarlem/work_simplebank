@@ -1,20 +1,44 @@
 # Log
 
 
-## 15.12.2023: Lezione 0
+## 15.12.2023: Lezione 1
 https://www.youtube.com/watch?v=TtCfDXfSw_0&list=PLy_6D98if3ULEtXtNSY_2qN21VCKgoQAE&ab_channel=TECHSCHOOL
+
+Ho fatto il design del DB con `dbdiagram.io`
+
+    ha creato tutte le tabelle in dbdiagram con le varie references
+    poi ha esportato a sql `Export to postgreSQL` e  
 
 Ho installato sqlc con `go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`
 
-## 15.12.2023: Lezione 1
-https://www.youtube.com/watch?v=Q9ipbLeqmQo&list=PLy_6D98if3ULEtXtNSY_2qN21VCKgoQAE&index=3&ab_channel=TECHSCHOOL
+## 15.12.2023: Lezione 2 - Setup development environment on windows
+
+wsl, vscode, etc... docker
 
 
-## 15.12.2023: Lezione 2
 
+## 15.12.2023: Lezione 3 - Setup development environment on macos
+go, vscode 
 
-## 17.12.2023: Lezione 3
+## 17.12.2023: Lezione 4 - Use docker + tableplus to create db schema
 https://www.youtube.com/watch?v=0CYkrGIJkpw&list=PLy_6D98if3ULEtXtNSY_2qN21VCKgoQAE&index=4
+
+
+Fa partire postgres in docker container. ... tutto dal terminal.
+
+Poi, per testare, usa docker exec per loggarsi al container... con `psql -U root` come comando.
+
+Poi testa:
+`select now()`
+
+
+Poi installa tableplus ... e esegue tutte le query esportate precedentemente. 
+Vede che le tables sono state create nel db. 
+Controlla lo schema e fa vari fix su quello che si aspetta...va dietro a dbdiagram e riesporta. 
+
+
+## 17.12.2023: Lezione 5 - How to write & run database migration in golang
+
 
 Schema migration 
 usiamo golang migrate library per schema migration 
@@ -39,7 +63,7 @@ L'idea e':
 - creo una migrazione 
 - copio tutto questo codice generato direttamente nei migration files
 
-## 18.12.2023: Lezione 4 - CRUD operations sul db
+## 18.12.2023: Lezione 6 - CRUD operations sul db
 https://www.youtube.com/watch?v=prh0hTyI1sU&list=PLy_6D98if3ULEtXtNSY_2qN21VCKgoQAE&index=5
 
 In pratica ho installato sqlc... 
@@ -70,7 +94,7 @@ NB. ho dovuto commentare la riga `sql_package: "pgx/v5"` in sqlc.yaml altrimenti
 
 Ho anche creato il random generator e un nuovo target per test nel Makefile. 
 
-## 19.12.2023: Lezione 6 - A clean way to implement database transaction in Golang
+## 19.12.2023: Lezione 7 - A clean way to implement database transaction in Golang
 https://www.youtube.com/watch?v=gBh__1eFwVI 
 
 Qui si introducono le transactions.
@@ -101,7 +125,7 @@ La struttura e' una sorta di wrapper con:
 - commit in caso di successo
 
 
-## 19.12.2023: Lezione 7 - DB transaction lock & How to handle deadlock in Golang
+## 19.12.2023: Lezione 8 - DB transaction lock & How to handle deadlock in Golang
 https://www.youtube.com/watch?v=G2aggv_3Bbg
 
 Qui vediamo i transaction locks.
@@ -127,7 +151,7 @@ invece di $2, usa sqlc.arg(NEWNAME)
 NEWNAME e' il nome del nuovo parametro generato nella corrispondente request struct. 
 
 
-## 22.12.2023 - Lezione 8 - how to avoid db deadlock
+## 22.12.2023 - Lezione 9 - how to avoid db deadlock
 
 Uso questa query per controllare i lock:
 ```sql
@@ -170,13 +194,13 @@ In questa lezione abbiamo anche creato un metodo helper AddMoney per refactoring
 
 
 
-## 26.12.2023 - Lezione 9 - Transaction isolation level
+## 26.12.2023 - Lezione 10 - Transaction isolation level
 https://www.youtube.com/watch?v=4EajrPgJAk0
 
 Spiega prima la teoria poi fa qualche esempio con pqsl per dimostrare i vari tipi di isolation.
 
 
-## 26.12.2023 - Lezione 10 - Setup Github Actions for Golang + Postgres to run automated tests
+## 26.12.2023 - Lezione 11 - Setup Github Actions for Golang + Postgres to run automated tests
 https://www.youtube.com/watch?v=3mzQRJY1GVE
 
 Ho creato un nuovo repository in github e pushato il codice. 
@@ -198,7 +222,7 @@ ports:
 in our case....
 
 
-## 27.12.2023 - Lezione 11 - Implement RESTful HTTP API in Go using Gin
+## 27.12.2023 - Lezione 13 - Implement RESTful HTTP API in Go using Gin
 https://www.youtube.com/watch?v=n_Y_YisgqTw
 
 Here we write the api with GIN.
@@ -230,14 +254,14 @@ Next he mentions to implement pagination on listAccounts... but instead of takin
 Once implemented, we tested the same with postman. Also noticed that if providing a non existing page id, it returns "null".
 So, we modified sqlc conf file by adding `emit_empty_slices: true` so that we get `[]`.
 
-## 06.01.2024 - Lezione 12 - Load config from file & environment variables in Golang with Viper
+## 06.01.2024 - Lezione 14 - Load config from file & environment variables in Golang with Viper
 
 Atm we are encoding in constan variables several parameters like db related ones. 
 
 We install viper... and then add viper to load from config file to Config struct.
 
 
-## 05.02.2024 - Lezione 13 - Mock DB for testing HTTP API in go and achieve 100% coverage 
+## 05.02.2024 - Lezione 15 - Mock DB for testing HTTP API in go and achieve 100% coverage 
 
 Why use mock database? 
 
@@ -249,7 +273,6 @@ Why use mock database?
 Is it good enough to test our API with a mock DB? Yes!. Our real db store is already tested in previous lectures. 
 
 Mock db and real db should implement the same interface. 
-
 
 ### How to mock db? 
 Two ways:
@@ -266,6 +289,82 @@ Two ways:
 First we have to install for gomock.
 
 `go install github.com/golang/mock/mockgen@v1.6.0`
+
+we need to replace the store object with an interface... 
+
+E' importante notare che il nostro obiettivo e' quello di creare un interfaccia che includa il metodo TransferTx e tutti i metodi della sotto struct Queries. Ma non vogliamo ripetere tutto.... 
+fortunatamente in sqlc abbiamo un emit_interface option che possiamo settare a true. 
+
+Queries struct e' la struct generata da sqlc... in db.go.
+
+Dopo aver settato a true questo parameter... e rigenerato con make sqlc, otteniamo un nuovo file `querier.go` contenente la nostra interfaccia Querier. 
+
+Con la Store interface... passata al metodo NewServer ora possiamo implementare una versione mocked che implementi tale interface al posto del db reale. 
+
+NB. nel main gli step sono:
+- instanzia uno store --> nel nostro caso sara' mocked per i test
+- poi istanzia un server passandogli lo store
+- fai partire il server
+
+
+### Creazione del mock...
+
+Creo una mock folder nel db package. 
+
+Useremo la reflection per generare i mock... c'e' anche un altro modo.
+
+
+Ho creato un target nel makefile per generare il mio mock db. 
+
+Nel db/mock/store.go ho il mio mock db... 
+c'e' una struct MockStore con tutti i metodi implementati dell'interfaccia che ho specificato nel makefile target/mockgen command. 
+
+
+Ora posso creare il mio test... parto dal GetAccount... 
+In account_test.go creo un TestGetAccountAPI method... 
+
+Il mockstore ha un factory method che riceve un controller. 
+Il controller e' generato via gomock.NewController.. 
+
+
+## 12.04.2024 - Lezione 16 - Custom validator
+
+Qui si inizia implementando la parte dell'api relativa alla nuova rouse POST transfers. Per creare nuovi transfer. Il backend gia c'e' ... manca solo il metodo nell'api. 
+
+A questo punto, il tizio dice che le regole di validazione presenti nei go tags sono HARD CODED e che dovremmo trovare qualcosa di meglio. 
+e.g.`oneof=USD EUR CAD`. 
+
+Usiamo un custom validator. 
+
+Creiamo un file `validator.go`
+
+
+Non ho capito molto come ha fatto il casting del validator... da quanto ho capito, il framework usato e' supportato da gin... ma non ho capito come. 
+Visto che non usero' mai gin, penso di non voler approfondire. 
+
+
+## 14.04.2024 - Lezione 17 - Add user table with unique & foreign key constraints
+
+Oggi aggiungiamo una nuova user table al database... in vista della feature di authentication. 
+Dobbiamo poi connettere questa con l'account table esistente attraverso qualche db constraint.  
+
+Ha usato di nuovo dbdiagrams... aggiunto la tabella users e aggiunto un paio di vincoli/constraints. 
+
+Export e poi ha creato una nuova migrazione. Questo e' il modo corretto di procedere... 
+
+La migrazione e' stata generata con: `migrate create -ext sql -dir db/migration -seq add_users`
+
+Mi ha generato una migrazione con seq number 000002.
+
+
+## 14.04.2024 - Lezione 18 - How to handle DB errors in Golang correctly
+
+## 15.04.2024 - Lezione 19 - How to securely store passwords? Hash passwords in Go with bcrypt.
+
+DONE
+
+
+## 15.04.2024 - Lezione 20. How to write stronger unit tests with a custom gomock matcher
 
 
 
@@ -301,3 +400,12 @@ motivo per cui possiamo passarlo alla factory `New` senza problemi.
 
 To start generating code that uses pgx, set the sql_package field in your sqlc.yaml configuration file. Valid options are pgx/v4 or pgx/v5
 
+
+## Basic of gomock
+
+Usage of GoMock follows four basic steps:
+
+1. Use mockgen to generate a mock for the interface you wish to mock.
+2. In your test, create an instance of gomock.Controller and pass it to your mock object’s constructor to obtain a mock object.
+3. Call EXPECT() on your mocks to set up their expectations and return values
+4. Call Finish() on the mock controller to assert the mock’s expectations
