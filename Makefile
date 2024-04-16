@@ -57,3 +57,11 @@ server:
 
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/xmarlem/simplebank/db/sqlc Store 
+
+
+
+image.build:
+	docker build -t simplebank:latest .
+
+image.run:
+	docker run --name simplebank --network bank-network -e DB_SOURCE="postgres://root:test@postgres:5432/simple_bank?sslmode=disable" -p 8080:8080 simplebank:latest
