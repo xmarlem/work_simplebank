@@ -27,7 +27,10 @@ func main() {
 	// prima alloco uno store...
 	store := db.NewStore(conn)
 	// poi lo passo ad una nuova instanza del server/api ...
-	server := api.NewServer(store)
+	server, err := api.NewServer(conf, store)
+	if err != nil {
+		log.Fatal("cannot create server:", err)
+	}
 
 	// infine faccio partire il server sull'indirizzo passato via config
 	err = server.Start(conf.ServerAddress)

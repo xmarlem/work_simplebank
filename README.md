@@ -367,6 +367,22 @@ DONE
 ## 15.04.2024 - Lezione 20. How to write stronger unit tests with a custom gomock matcher
 
 
+## 19.04.2024 - Lezione 22. How to create and verify JWT & PASETO token in golang
+
+
+Claims e' un interface con un solo metodo `Valid` che ci permette di controllare se un token e' valido o no.
+
+
+ParseWithClaims e' un metodo che mi permette di fare il parsing di un token, ottenere i suoi claims. 
+Ci posso passare come input una func keyFunc. 
+keyFunc e' una callback function, riceve il token parsato, ma non verificato. questo ci permette di usare le properties nell'header del token (e.g. `kid` per identificare quale key usare).
+
+
+ParseWithClaims restituisce un error... ma quale? 
+
+
+
+## 21.04.2024 - Lezione 24. Implement authentication middleware and authorization rules in golang with gin
 
 
 # Appendix

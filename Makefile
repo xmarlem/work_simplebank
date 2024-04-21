@@ -8,6 +8,8 @@ DB_USER=root
 
 POSTGRESQL_URL="postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB)?sslmode=disable"
 
+MIGRATION_NAME ?= $(shell bash -c 'read -p "Migration step name: " migname; echo $$migname')
+
 db.run:
 	docker run --name postgres -p $(DB_PORT):5432 -e POSTGRES_USER=$(DB_USER) -e POSTGRES_PASSWORD=$(DB_PASSWORD) -d postgres:12-alpine
 	sleep 1
@@ -34,6 +36,9 @@ db.remove:
 
 migrate.init:
 	migrate create -ext sql -dir db/migration -seq init_schema
+
+migrate.create:
+	migrate create -ext sql -dir db/migration -seq $(MIGRATION_NAME)
 
 migrate.up:
 	migrate -database=$(POSTGRESQL_URL) -path=db/migration -verbose up
